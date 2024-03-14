@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  gab_core:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  gab_auth:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development

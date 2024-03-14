@@ -1,0 +1,47 @@
+version: '3.4'
+
+services:
+  gab_core:
+    # image: ghcr.io/get-a-blanket/core
+    build:
+      context: ../../../GaB_Core
+      dockerfile: GaB_Core/dev.Dockerfile
+    depends_on:
+      - postgresql
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_HTTP_PORTS=8080
+      # - ASPNETCORE_HTTPS_PORTS=8081
+    ports:
+      - "8082:8080"
+      - "8083:8081"
+
+  postgresql:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5555:5432"
+
+  gab_auth:
+    build:
+      context: ..
+      dockerfile: GaB_Auth/dev.Dockerfile
+    depends_on:
+      - postgresql
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_HTTP_PORTS=8080
+      # - ASPNETCORE_HTTPS_PORTS=8081
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+
+networks:
+  default:
+  
+volumes:
+  db-data:

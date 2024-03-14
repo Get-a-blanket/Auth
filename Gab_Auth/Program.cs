@@ -1,41 +1,62 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace GaB_Auth;
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddSwaggerGen(c =>
+internal class Program
 {
-    c.SwaggerDoc("v1",
-        new OpenApiInfo
+    private static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+
+        // Add services to the container.
+        builder.Services.AddControllers();
+
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(c =>
         {
-            Title = "Auth API",
-            Version = "v1"
+            c.SwaggerDoc("v1",
+                new OpenApiInfo
+                {
+                    Title = "Auth API",
+                    Version = "v1"
+                }
+             );
+
+            var filePath = Path.Combine(AppContext.BaseDirectory, "Documentation.xml");
+            c.IncludeXmlComments(filePath);
+        });
+
+        var app = builder.Build();
+
+        Configuration = app.Configuration;
+
+        //DB setup
+        GetContext().Database.Migrate();
+
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+            });
         }
-     );
 
-    var filePath = Path.Combine(System.AppContext.BaseDirectory, "Documentation.xml");
-    c.IncludeXmlComments(filePath);
-});
+        //app.UseHttpsRedirection();
 
-var app = builder.Build();
+        app.MapControllers();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+        app.Run();
+    }
+
+    public static IConfiguration Configuration { get; private set; }
+
+    public static DbConnector.ApplicationContext GetContext()
+    {
+        return new DbConnector.ApplicationContext(Configuration);
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();

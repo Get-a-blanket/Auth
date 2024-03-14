@@ -1,0 +1,33 @@
+name: version-change-check
+
+on:
+  pull_request:
+    branches:    
+      - master
+
+jobs:
+  version-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get PR number
+        run: |
+          echo "PR_NUMBER=${{ github.ref_name }}" | sed 's!/merge!!' - >> $GITHUB_ENV
+          echo "PR_NUMBER=${{ github.ref_name }}" | sed 's!/merge!!' -
+
+      - name: Changed files
+        run: gh pr diff ${{ env.PR_NUMBER }} --name-only
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Project file chenge not found
+        run: if ! [[ $(gh pr diff ${{ env.PR_NUMBER }} --name-only | grep "GaB_Auth/GaB_Auth.csproj") ]]; then exit 1; fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Version change not found
+        run: if ! [[ $(gh pr diff ${{ env.PR_NUMBER }} | grep "<AssemblyVersion>" | grep "+") ]]; then exit 1; fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
