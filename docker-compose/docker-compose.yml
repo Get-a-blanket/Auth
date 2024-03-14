@@ -2,10 +2,10 @@ version: '3.4'
 
 services:
   gab_core:
-    # image: ghcr.io/get-a-blanket/core
-    build:
-      context: ../../../GaB_Core
-      dockerfile: GaB_Core/dev.Dockerfile
+    image: ghcr.io/get-a-blanket/core
+    # build:
+    #   context: ../../../GaB_Core
+    #   dockerfile: GaB_Core/dev.Dockerfile
     depends_on:
       - postgresql
     restart: unless-stopped
