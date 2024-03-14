@@ -13,7 +13,7 @@
 	  <Company>Get a Blanket</Company>
 	  <Authors>Get a Blanket</Authors>
 	  <Product>Auth</Product>
-	  <AssemblyVersion>0.0.0.1</AssemblyVersion>
+	  <AssemblyVersion>0.0.0.2</AssemblyVersion>
 	  <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
 	  <ContainerDevelopmentMode>Regular</ContainerDevelopmentMode>
   </PropertyGroup>
