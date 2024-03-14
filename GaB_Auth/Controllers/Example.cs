@@ -28,11 +28,11 @@ namespace GaB_Auth.Controllers
         }
 
         /// <summary>
-        /// Рандомайзер погоды
+        /// Р Р°РЅРґРѕРјР°Р№Р·РµСЂ РїРѕРіРѕРґС‹
         /// </summary>
-        /// <param name="id">Рандомный параметр</param>
+        /// <param name="id">Р Р°РЅРґРѕРјРЅС‹Р№ РїР°СЂР°РјРµС‚СЂ</param>
         /// <returns>
-        /// Погода в Перми
+        /// РџРѕРіРѕРґР° РІ РџРµСЂРјРё
         /// </returns>
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get(int id)
